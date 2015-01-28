@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Domain;
@@ -41,11 +42,22 @@ namespace SearchServices
                     Index = FieldIndexOption.NotAnalyzed
                 };
 
-            paramsProperty.Properties.Add("productPropertyId1", boolMapping);
-            paramsProperty.Properties.Add("productPropertyId2", numberMapping);
-            paramsProperty.Properties.Add("productPropertyId3", boolMapping);
-            // ...
-            paramsProperty.Properties.Add("productPropertyIdn", stringMapping);
+            IEnumerable<object> properties = GetAllProperties();
+            foreach (var property in properties)
+            {
+                //switch (property.DataType)
+                //{
+                //    case DataType.Logic:
+                //        paramsProperty.Properties.Add(property.Id, boolMapping);
+                //        break;
+                //    case DataType.Numeric:
+                //        paramsProperty.Properties.Add(property.Id, numberMapping);
+                //        break;
+                //    case DataType.Text:
+                //        paramsProperty.Properties.Add(property.Id, stringMapping);
+                //        break;
+                //}
+            }
 
             indexDefinition.Properties.Add(Property.Name<ProductIndex>(p => p.Params), paramsProperty);
             indexDefinition.Properties.Add(Property.Name<ProductIndex>(p => p.Id), stringMapping);
@@ -58,9 +70,14 @@ namespace SearchServices
             _client.IndexMany(products);
         }
 
+        private IEnumerable<object> GetAllProperties()
+        {
+            return Enumerable.Empty<object>();
+        }
+
         private static IEnumerable<Product> GetAllProducts()
         {
-            return new List<Product>();
+            return Enumerable.Empty<Product>();
         }
 
         public IEnumerable<string> SearchCategories(IEnumerable<object> filters)
